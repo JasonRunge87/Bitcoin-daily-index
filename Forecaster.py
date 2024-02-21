@@ -12,7 +12,8 @@ st.write ("")
 st.write ("Bitcoin - Daily Forecaster")
 st.write ("")
 st.write ("Inputs : ")
-st.write( " -> BITUSD / Nasdaq / NYSE / Shanghai-Composite Index / NSE-India / Korean-SE / FSTE-Index / Hang Seng- Index / Nikki")
+st.write( " -> BITUSD / Nasdaq / NYSE / Shanghai-Composite Index")
+st.write( " -> NSE-India / Korean-SE / FSTE-Index / Hang Seng- Index / Nikki")
 
 if st.button("Forecast"):
   
