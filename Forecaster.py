@@ -18,9 +18,9 @@ st.write( " -> BITUSD / Nasdaq / NYSE / Shanghai-Composite Index")
 st.write( " -> NSE-India / Korean-SE / FSTE-Index / Hang Seng- Index / Nikki")
 
 
-
+####################################### BITCOIN FORECASTING MODEL - XG Boost - BITCOIN CLOSE 
 # URL of the model file on GitHub
-model_url = "https://raw.githubusercontent.com/username/repository/branch/path/to/model.pkl"
+model_url = "https://github.com/JasonRunge87/Bitcoin-daily-index/blob/main/BCC-XG.pkl"
 
 # Download the model file
 response = requests.get(model_url)
@@ -36,9 +36,46 @@ if response.status_code == 200:
 else:
     print("Failed to download the model")
 
+####################################### BITCOIN FORECASTING MODEL - XG Boost - BITCOIN HIGH 
+# URL of the model file on GitHub
+model_url = "https://github.com/JasonRunge87/Bitcoin-daily-index/blob/main/BCH-XG.pkl"
+
+# Download the model file
+response = requests.get(model_url)
+
+# Check if download was successful
+if response.status_code == 200:
+    # Save the model to a file
+    with open("model.pkl", "wb") as f:
+        f.write(response.content)
+    
+    # Load the model
+    model = joblib.load("model.pkl")
+else:
+    print("Failed to download the model")
+
+####################################### BITCOIN FORECASTING MODEL - XG Boost - BITCOIN LOW 
+# URL of the model file on GitHub
+model_url = "https://github.com/JasonRunge87/Bitcoin-daily-index/blob/main/BCL-XG.pkl"
+
+# Download the model file
+response = requests.get(model_url)
+
+# Check if download was successful
+if response.status_code == 200:
+    # Save the model to a file
+    with open("model.pkl", "wb") as f:
+        f.write(response.content)
+    
+    # Load the model
+    model = joblib.load("model.pkl")
+else:
+    print("Failed to download the model"
 
 
 
+
+####################################### FORECASTING MODEL  
 if st.button("Forecast"):
   
     backfill = True
