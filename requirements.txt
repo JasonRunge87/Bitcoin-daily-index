@@ -4,5 +4,4 @@ numpy==1.21.6
 pandas==1.4.4
 streamlit==1.25.0
 yfinance==0.2.36
-sklearn==1.0.2
-
+scikit-learn==0.24.1
