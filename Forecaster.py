@@ -95,9 +95,9 @@ if st.button("Forecast"):
         try:
             # Load the model
             Bitcoin_XGBoost_Daily_high = joblib.load("model.pkl")
-            print("Model loaded successfully.")
+            st.write( " ----> Bitcoin_XGBoost_Daily_high successfully imported")
         except Exception as e:
-            print("Failed to load the model:", e)
+             st.write( " ----> Bitcoin_XGBoost_Daily_high failed to be imported")
     else:
         print("Failed to download the model")
 
@@ -118,9 +118,9 @@ if st.button("Forecast"):
         try:
             # Load the model
             Bitcoin_XGBoost_Daily_low = joblib.load("model.pkl")
-            print("Model loaded successfully.")
+            st.write( " ----> Bitcoin_XGBoost_Daily_low successfully imported")
         except Exception as e:
-            print("Failed to load the model:", e)
+            st.write( " ----> Bitcoin_XGBoost_Daily_low failed to be imported")
     else:
         print("Failed to download the model")
 
@@ -142,9 +142,9 @@ if st.button("Forecast"):
         try:
             # Load the model
             Bitcoin_XGBoost_Daily_close = joblib.load("model.pkl")
-            print("Model loaded successfully.")
+            st.write( " ----> Bitcoin_XGBoost_Daily_close successfully imported")
         except Exception as e:
-            print("Failed to load the model:", e)
+            st.write( " ----> Bitcoin_XGBoost_Daily_close failed to be imported")
     else:
         print("Failed to download the model")
     
