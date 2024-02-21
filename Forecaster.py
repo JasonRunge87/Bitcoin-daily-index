@@ -6,6 +6,8 @@ import numpy as np
 from datetime import datetime
 import joblib
 import matplotlib.pyplot as plt
+import requests
+
 
 st.title('Runge Forecasting')
 st.write ("")
@@ -14,6 +16,28 @@ st.write ("")
 st.write ("Inputs : ")
 st.write( " -> BITUSD / Nasdaq / NYSE / Shanghai-Composite Index")
 st.write( " -> NSE-India / Korean-SE / FSTE-Index / Hang Seng- Index / Nikki")
+
+
+
+# URL of the model file on GitHub
+model_url = "https://raw.githubusercontent.com/username/repository/branch/path/to/model.pkl"
+
+# Download the model file
+response = requests.get(model_url)
+
+# Check if download was successful
+if response.status_code == 200:
+    # Save the model to a file
+    with open("model.pkl", "wb") as f:
+        f.write(response.content)
+    
+    # Load the model
+    model = joblib.load("model.pkl")
+else:
+    print("Failed to download the model")
+
+
+
 
 if st.button("Forecast"):
   
