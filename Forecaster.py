@@ -17,15 +17,12 @@ st.write ("Inputs : ")
 st.write( " -> BITUSD / Nasdaq / NYSE / Shanghai-Composite Index")
 st.write( " -> NSE-India / Korean-SE / FSTE-Index / Hang Seng- Index / Nikki")
 
-
+backfill = True
 
 if st.button("Forecast"):
   
-    backfill = True
-    
-    export_folder = 'C:/Users/JasonRunge/Desktop/Trying/'
-    file_name = str('Forecaster_results.xlsx')
-    filepath = export_folder + file_name
+    ######################################################### IMPORT DATA 
+    st.write ("Importing data")  
     
     # Get the current date and time
     current_date = datetime.now()
@@ -42,6 +39,10 @@ if st.button("Forecast"):
     # Fetch daily historical data for the past 5 years
     data = yf.download(ticker_symbols, start='2019-02-16', end=current_date_string)
     
+    st.write( " ----> Data successfully imported")
+    
+    
+    ######################################################### DATA PROCESSING 
     # IF FILLING WITH PREVIOUS DATA 
     if backfill is True:
        data = data.fillna(method='ffill')
@@ -49,26 +50,12 @@ if st.button("Forecast"):
     else:
         data.dropna(inplace=True)
     
-    
     # Flatten the multi-level column index into a single level
     data.columns = ['_'.join(col).strip() for col in data.columns.values]
     # Reset index to make Date a column
     data.reset_index(inplace=True)
     # Set Date to index
     data = data.set_index('Date')
-    
-    
-    
-    # Load the Multi-output-XGboost Bitcoin daily high model
-    Bitcoin_XGBoost_Daily_high = joblib.load('./BCH-XG.pkl')
-
-
-    # Load the Multi-output-XGboost Bitcoin daily low model
-    Bitcoin_XGBoost_Daily_low = joblib.load('./BCL-XG.pkl')
-    
-    # Load the Multi-output-XGboost Bitcoin daily close model
-    Bitcoin_XGBoost_Daily_close = joblib.load('./BCC-XG.pkl')
-    
     
     # FIND THE NEXT FIVE DAYS
     # Get the last/most upto date sample point 
@@ -83,9 +70,44 @@ if st.button("Forecast"):
     next_five_days_dates = next_five_days_dates.set_index('Date')
     del(next_five_days)
     
+    st.write( " ----> Data successfully processed")
+    
+    
+    
+    ######################################################### MODEL IMPORTING PROCESSING 
+    st.write ("Importing models") 
+    
+
+    
+    try:
+        Bitcoin_XGBoost_Daily_low = joblib.load('BCL-XG.pkl')
+        st.write("BCL-XG Model loaded successfully!")
+    except Exception as e:
+        st.error(f"Error loading model: {e}")
+    
+    
+    
+    
+    
+    
+    
+    # Load the Multi-output-XGboost Bitcoin daily high model
+    Bitcoin_XGBoost_Daily_high = joblib.load('./BCH-XG.pkl')
+
+
+    # Load the Multi-output-XGboost Bitcoin daily low model
+    Bitcoin_XGBoost_Daily_low = joblib.load('./BCL-XG.pkl')
+    
+    # Load the Multi-output-XGboost Bitcoin daily close model
+    Bitcoin_XGBoost_Daily_close = joblib.load('./BCC-XG.pkl')
+    
+    st.write( " ----> Models successfully processed")
+    
+    
+    
         
-    
-    
+    ######################################################### MODEL FORECASTING  
+    st.write ("Generating forecasts ") 
     # FORECAST NEXT FIVE DAYS HIGHS
     Y_forecast_High_full = Bitcoin_XGBoost_Daily_high.predict(data)
     Y_forecast_High_today = Y_forecast_High_full[-1]
@@ -146,37 +168,15 @@ if st.button("Forecast"):
     }
     # Create a DataFrame from the dictionary
     Y_forecast_Close_today = pd.DataFrame(Y_forecast_Close_today)
-    
     del(last_time_stamp2)
     
-    # Load existing data from Excel file (if it exists)
-    try:
-        existing_highs = pd.read_excel(filepath, sheet_name='Highs')
-        existing_lows = pd.read_excel(filepath, sheet_name='Lows')
-        existing_closes = pd.read_excel(filepath, sheet_name='Closes')
-    except FileNotFoundError:
-        # If the file doesn't exist, create empty DataFrames
-        existing_highs = pd.DataFrame()
-        existing_lows = pd.DataFrame()
-        existing_closes = pd.DataFrame()
+    st.write( " ----> Forecasts successfully generated")
     
-    existing_highs = existing_highs.drop(columns=['Unnamed: 0'])
-    existing_lows = existing_lows.drop(columns=['Unnamed: 0'])
-    existing_closes = existing_closes.drop(columns=['Unnamed: 0'])
     
-    # Concatenate existing data with new data
-    combined_highs = pd.concat([existing_highs, Y_forecast_High_today], ignore_index=True)
-    combined_lows = pd.concat([existing_lows, Y_forecast_Low_today], ignore_index=True)
-    combined_closes = pd.concat([existing_closes, Y_forecast_Close_today], ignore_index=True)
     
-    # Save combined data to Excel file
-    with pd.ExcelWriter(filepath) as writer:
-        combined_highs.to_excel(writer, sheet_name='Highs', index=True)
-        combined_lows.to_excel(writer, sheet_name='Lows', index=True)
-        combined_closes.to_excel(writer, sheet_name='Closes', index=True)
     
-    print("Forecasts appended to Excel file successfully.")
-
+    ######################################################### RESULTS EXPORTING 
+    
     # Assuming Output is your DataFrame with dates as the index and 'Bitcoin High', 'Bitcoin Low', 'Bitcoin Close' as columns
     
     # Plotting
@@ -204,3 +204,22 @@ if st.button("Forecast"):
     # Displaying the DataFrame
     st.write("Forecasted Values include")
     st.dataframe(Output)
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
