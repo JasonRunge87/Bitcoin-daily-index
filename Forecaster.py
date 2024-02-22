@@ -76,21 +76,7 @@ if st.button("Forecast"):
     
     ######################################################### MODEL IMPORTING PROCESSING 
     st.write ("Importing models") 
-    
-
-    
-    try:
-        Bitcoin_XGBoost_Daily_low = joblib.load('BCL-XG.pkl')
-        st.write("BCL-XG Model loaded successfully!")
-    except Exception as e:
-        st.error(f"Error loading model: {e}")
-    
-    
-    
-    
-    
-    
-    
+        
     # Load the Multi-output-XGboost Bitcoin daily high model
     Bitcoin_XGBoost_Daily_high = joblib.load('./BCH-XG.pkl')
 
